@@ -1,0 +1,25 @@
+-> BOX = FrameLayout
+-> ROW and COLUMN = LinearLayout
+-> LazyRow, LazyColumn and LazyVerticalGrid = recyclerView
+-> ConstrainLayout -> Is still the same in JetPack compose
+-> Scaffold -> To draw the component in a single view
+-> Surface is equivalent to BOX but it does implement behind the scene the Material stuff
+-> Card is quite close to Surface
+-> BoxWithConstrains
+------------------Component of an material design screen -----------------
+Cards
+App bars
+Buttons
+Checkboxes
+Chips.
+Dialogs
+
+---------------------- Equivalents---------
+fillMaxSize() = match_parent
+padding(16.dp) = android.padding="16dp"
+
+---------Modificadores----------
+-> De posicionamiento y tamaño
+-> De funcionalidad
+-> De apariencia
+-> De listeners
