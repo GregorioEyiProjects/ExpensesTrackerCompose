@@ -54,7 +54,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.example.expensestrackercompose.R
 
 
@@ -84,7 +83,7 @@ fun TexFieldNameComponent(
     labelValue: String,
     placeholderValue: String,
     onTextSelected: (String) -> Unit,
-    nameError:Boolean = false
+    nameError: Boolean = false
 ) {
     val textName = remember {
         mutableStateOf("")
@@ -129,7 +128,7 @@ fun TexFieldEmailComponent(
     labelValue: String,
     placeholderValue: String,
     onTextSelected: (String) -> Unit,
-    emailError:Boolean = false
+    emailError: Boolean = false
 ) {
     val textEmail = remember {
         mutableStateOf("")
@@ -147,7 +146,10 @@ fun TexFieldEmailComponent(
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next
+        ),
         modifier = Modifier.fillMaxWidth(),
         singleLine = true,
         maxLines = 1,
@@ -193,10 +195,13 @@ fun TexFieldPassComponent(
         },
         label = { Text(text = labelValue) },
         placeholder = { Text(text = placeholderValue) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
         singleLine = true,
         maxLines = 1,
-        keyboardActions = KeyboardActions{
+        keyboardActions = KeyboardActions {
             localFocusManager.clearFocus(true)
         },
         modifier = Modifier.fillMaxWidth(),
@@ -238,9 +243,83 @@ fun TexFieldPassComponent(
     )
 }
 
+
+/*-------------------------- Policies ----------------*/
+
+@Composable
+fun CheckBookComponent(
+    value: String,
+    onTextSelected: (String) -> Unit,
+    //onCheckPressed: (Boolean) -> Unit
+    onCheckBoxStateChanged: (Boolean) -> Unit
+
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(45.dp),
+        verticalAlignment = Alignment.CenterVertically,
+
+        ) {
+
+        val checkBoxState = remember {
+            mutableStateOf(false)
+        }
+
+        Checkbox(
+            checked = checkBoxState.value,
+            onCheckedChange = {isChecked ->
+                Log.d("CheckBookComponent", "Checked state: $isChecked")
+                checkBoxState.value =  isChecked
+                onCheckBoxStateChanged(isChecked)
+            },
+        )
+
+        ClickableTextComponent(value, onTextSelected)
+    }
+}
+
+@Composable
+fun ClickableTextComponent(
+    textValue: String,
+    onTextSelected: (String) -> Unit
+) {
+
+    val initialPart = "By continuing you accept out "
+    val privacyPolicyText = "Privacy Policy "
+    val andText = "and "
+    val lastPart = "Terms of Use"
+
+    //var enabled by remember { mutableStateOf(true) }
+
+    val annotatedString = buildAnnotatedString {
+        append(initialPart)
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.term_and_policy_color))) {
+            pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
+            append(privacyPolicyText)
+        }
+        append(andText)
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.term_and_policy_color))) {
+            pushStringAnnotation(tag = lastPart, annotation = lastPart)
+            append(lastPart)
+        }
+    }
+    ClickableText(
+        text = annotatedString,
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(offset, offset)
+                .firstOrNull()?.also { span ->
+                    Log.d("ClickableTextComponent", "{$span}")
+                    if (span.item == privacyPolicyText || span.item == lastPart) {
+                        onTextSelected(span.item)
+                    }
+                }
+        })
+}
+
 //------------------------------Button--------------------
 @Composable
-fun ButtonSignUpComponent(navController: NavHostController) {
+fun ButtonSignUpComponent() {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
@@ -251,7 +330,7 @@ fun ButtonSignUpComponent(navController: NavHostController) {
                 .width(150.dp),
             shape = RoundedCornerShape(12.dp),
             onClick = {
-                // navController.navigate("Term_and_conditions")
+
             }
         ) {
             Text(
@@ -268,8 +347,8 @@ fun ButtonSignUpComponent(navController: NavHostController) {
 @Composable
 fun GradientButtonComponent(
     textValue: String,
-    navController: NavHostController,
-    onButtonClicked:() -> Unit
+    onButtonClicked: () -> Unit,
+    isEnable: Boolean = false
 ) {
     Button(
         onClick = {
@@ -279,7 +358,8 @@ fun GradientButtonComponent(
             .fillMaxWidth()
             .heightIn(45.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnable
 
     ) {
         Box(
@@ -305,7 +385,6 @@ fun GradientButtonComponent(
         }
     }
 }
-
 
 /*-------------------------- Dividers ----------------*/
 @Composable
@@ -341,67 +420,6 @@ fun DividerComponent() {
 }
 
 
-/*-------------------------- Policies ----------------*/
-
-@Composable
-fun CheckBookComponent(value: String, onTextSelected: (String) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(45.dp),
-        verticalAlignment = Alignment.CenterVertically,
-
-        ) {
-        val checkBookState = remember {
-            mutableStateOf(false)
-        }
-        Checkbox(checked = checkBookState.value, onCheckedChange = {
-            checkBookState.value = !checkBookState.value
-        })
-        /*Text(
-            text = value,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Light
-        )*/
-        ClickableTextComponent(value, onTextSelected)
-    }
-}
-
-@Composable
-fun ClickableTextComponent(textValue: String, onTextSelected: (String) -> Unit) {
-
-    val initialPart = "By continuing you accept out "
-    val privacyPolicyText = "Privacy Policy "
-    val andText = "and "
-    val lastPart = "Terms of Use"
-
-    //var enabled by remember { mutableStateOf(true) }
-
-    val annotatedString = buildAnnotatedString {
-        append(initialPart)
-        withStyle(style = SpanStyle(color = colorResource(id = R.color.term_and_policy_color))) {
-            pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
-            append(privacyPolicyText)
-        }
-        append(andText)
-        withStyle(style = SpanStyle(color = colorResource(id = R.color.term_and_policy_color))) {
-            pushStringAnnotation(tag = lastPart, annotation = lastPart)
-            append(lastPart)
-        }
-    }
-    ClickableText(
-        text = annotatedString,
-        onClick = { offset ->
-            annotatedString.getStringAnnotations(offset, offset)
-                .firstOrNull()?.also { span ->
-                    Log.d("ClickableTextComponent", "{$span}")
-                    if (span.item == privacyPolicyText || span.item == lastPart) {
-                        onTextSelected(span.item)
-                    }
-                }
-        })
-}
-
 /*-------------------------- Sign up icons (Google and Facebook) ----------------*/
 @Composable
 fun SignUpIconsComponent() {
@@ -425,8 +443,8 @@ fun SignUpIconsComponent() {
 /*-------------------------- Sign up icons (Google and Facebook) ----------------*/
 @Composable
 fun ClickableLoginRegisterTextComponent(
-    initialPartValue:String,
-    lastPartValue:String,
+    initialPartValue: String,
+    lastPartValue: String,
     onTextSelected: (String) -> Unit
 ) {
 
@@ -486,13 +504,13 @@ private fun TexFieldEmailComponentPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun TexFieldPassComponentPreview() {
-   // TexFieldPassComponent("Password", "Enter your password here")
+    // TexFieldPassComponent("Password", "Enter your password here")
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ButtonSignUpComponentPreview() {
-    // ButtonSignUpComponent(navController)
+    // ButtonSignUpComponent()
 }
 
 @Preview(showBackground = true)

@@ -1,5 +1,6 @@
 package com.example.expensestrackercompose.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -67,9 +68,10 @@ fun SignUp(
                 )
             },
             emailError = viewModel.registrationUIState.value.emailError
-            )
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
+        //Password component
         TexFieldPassComponent(
             labelValue = "Password",
             placeholderValue = "Enter your password here",
@@ -83,21 +85,29 @@ fun SignUp(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        CheckBookComponent(stringResource(R.string.policies_and_term_of_use), onTextSelected = {
-            navController.navigate("Term_and_conditions")
-        })
+        CheckBookComponent(
+            value = stringResource(R.string.policies_and_term_of_use),
+            onTextSelected = {
+                navController.navigate("Term_and_conditions")
+            },
+            onCheckBoxStateChanged = {isChecked ->
+                viewModel.onEvent(
+                    event = UIEvents.PrivacyPolicyChecked(isChecked),
+                    myNavController = navController
+                )
+            }
+        )
         Spacer(modifier = Modifier.height(100.dp))
 
         GradientButtonComponent(
             textValue = stringResource(R.string.sign_up),
-            navController,
             onButtonClicked = {
-                //navController.navigate("Home")
                 viewModel.onEvent(
                     UIEvents.RegisterButtonClicked,
                     navController
                 )
-            }
+            },
+            isEnable = viewModel.allValidationsAreOK.value
         )
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -108,7 +118,7 @@ fun SignUp(
             initialPartValue = "Already have an account? ",
             lastPartValue = "Login",
             onTextSelected = {
-             navController.navigate("SignIn")
+                navController.navigate("SignIn")
             })
         SignUpIconsComponent()
     }

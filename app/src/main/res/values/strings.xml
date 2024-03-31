@@ -44,7 +44,7 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_pactice2">Pactice2Activity</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">ExpensesTrackerCompose</string>
     <string name="menu">Menu</string>
     <string name="welcome_back">Welcome back</string>
     <string name="expenses_tracker">Expenses tracker</string>

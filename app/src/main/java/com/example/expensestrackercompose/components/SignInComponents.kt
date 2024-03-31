@@ -27,7 +27,8 @@ import com.example.expensestrackercompose.R
 fun TextFieldComponent(
     textValue:String,
     placeholderValue:String,
-    onTextSelected: (String) -> Unit
+    onTextSelected: (String) -> Unit,
+    emailError:Boolean = false
 ){
     val textName = remember {
         mutableStateOf("")
@@ -61,7 +62,9 @@ fun TextFieldComponent(
         onValueChange = {
             textName.value = it
             onTextSelected(it)
-        })
+        },
+        isError = !emailError //Assign the opposite value
+        )
 }
 
 @Composable

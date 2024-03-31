@@ -19,6 +19,12 @@ object Validator {
         )
     }
 
+    fun checkBoxIsChecked(isChecked:Boolean):ValidationResult{
+        return ValidationResult(
+            isChecked
+        )
+    }
+
 }
 
 data class ValidationResult(

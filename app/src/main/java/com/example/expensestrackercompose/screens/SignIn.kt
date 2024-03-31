@@ -27,7 +27,7 @@ import com.example.expensestrackercompose.data.UIEvents
 
 @Composable
 fun SignIn(
-    myNavController: NavHostController,
+    navController: NavHostController,
     viewModel: LoginViewModel = viewModel()
 ) {
     Column(
@@ -40,46 +40,61 @@ fun SignIn(
         TextComponentTitle(textValue = "Welcome back")
         Spacer(modifier = Modifier.height(60.dp))
 
+        //Email component
         TextFieldComponent(
             textValue = "Email",
             placeholderValue = "Enter your email here",
             onTextSelected = {email ->
                 viewModel.onEvent(
                     UIEvents.EmailChange(email),
-                    myNavController
+                    navController
                 )
-            })
+            },
+            emailError = viewModel.registrationUIState.value.emailError
+            )
         Spacer(modifier = Modifier.height(10.dp))
 
+        //Password component
         TexFieldPassComponent(
             labelValue = "Password",
             placeholderValue = "Enter your password here",
             ontTextSelected = {password ->
                 viewModel.onEvent(
                     UIEvents.PasswordChange(password),
-                    myNavController
+                    navController
                 )
-            })
+            },
+            passwordError = viewModel.registrationUIState.value.passwordError
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
+        //Password forgotten component
         TextComponentForPasswordForgotten()
         Spacer(modifier = Modifier.height(200.dp))
 
+        //BTN Sign In component
         GradientButtonComponent(
             textValue = "LOG IN",
-            navController = myNavController,
-            onButtonClicked = {}
+            onButtonClicked = {
+                viewModel.onEvent(
+                    event = UIEvents.LoginButtonClicked,
+                    myNavController = navController
+                )
+            },
+            isEnable = viewModel.registrationUIState.value.passwordError
             )
         Spacer(modifier = Modifier.height(10.dp))
 
+        //Divider component
         DividerComponent()
         Spacer(modifier = Modifier.height(20.dp))
 
+        //Clickable text component
         ClickableLoginRegisterTextComponent(
             initialPartValue = "Don't you have an account yet? ",
             lastPartValue = "Register",
             onTextSelected = {
-            myNavController.navigate("SignUp")
+            navController.navigate("SignUp")
         })
         SignUpIconsComponent()
     }
