@@ -14,7 +14,7 @@ fun Nav(){
 
     val myNavController = rememberNavController()
 
-    NavHost(navController = myNavController, startDestination = "SignIn"){
+    NavHost(navController = myNavController, startDestination = "Home"){
 
         composable(route = "SignIn"){
             SignIn(myNavController)
