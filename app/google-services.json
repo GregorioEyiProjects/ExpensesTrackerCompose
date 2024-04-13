@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "202461030737",
+    "project_id": "expenses-tracker-compose",
+    "storage_bucket": "expenses-tracker-compose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202461030737:android:526209d324d45063e18b70",
+        "android_client_info": {
+          "package_name": "com.example.expensestrackercompose"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Sf-y6R0MXP9bPsUwMm_uX-582mNfwWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
